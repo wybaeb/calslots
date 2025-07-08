@@ -24,24 +24,43 @@
 
 ## Installation
 
+### Automatic Installation (Recommended)
+
 1. Clone this repository:
    ```bash
    git clone https://github.com/yourusername/calslots.git
    cd calslots
    ```
 
-2. Run the installation script:
+2. Run the smart installation script:
    ```bash
    chmod +x install.sh
    ./install.sh
    ```
-   
-   Or install manually:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
+
+The installation script will:
+- ✅ **Auto-detect missing dependencies** (Python, pip, Homebrew)
+- ✅ **Offer to install them automatically** if not found
+- ✅ **Create virtual environment** for clean dependency management
+- ✅ **Install all required packages** automatically
+- ✅ **Create desktop shortcut** for easy access
+- ✅ **Provide helpful usage instructions**
+
+**Perfect for non-technical users!** The script guides you through each step and handles all the technical setup automatically.
+
+### Manual Installation
+
+If you prefer manual installation:
+```bash
+# Install dependencies
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Create desktop shortcut (optional)
+chmod +x move_to_desktop.sh
+./move_to_desktop.sh
+```
 
 ## Usage
 
