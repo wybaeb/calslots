@@ -12,6 +12,7 @@
 - 📋 Flexible date range selection
 - 🖥️ Desktop shortcut creation
 - 💾 Minimal output mode by default
+- 📋 Automatic clipboard copy (enabled by default)
 - 🔧 Extensive command-line configuration
 - 🌐 Multi-language support (English/Russian)
 
@@ -73,6 +74,9 @@ python calendar_slots.py --min-duration 60
 
 # Verbose output with statistics
 python calendar_slots.py --verbose
+
+# Disable automatic clipboard copy
+python calendar_slots.py --no-copy
 ```
 
 ### Desktop Shortcut
@@ -98,6 +102,8 @@ This creates a "📅 Calendar Slots" shortcut on your desktop that runs the tool
 🗓️  Четверг (16.01.2025)
    ✅ 09:00 - 13:00 (4ч 0м)
    ✅ 15:30 - 19:00 (3ч 30м)
+
+📋 Свободные слоты скопированы в буфер обмена!
 ```
 
 ### Verbose Output
@@ -158,6 +164,17 @@ python calendar_slots.py --weeks 4
 # Only show slots longer than 1 hour
 python calendar_slots.py --min-duration 60
 ```
+
+### Clipboard Integration
+```bash
+# Automatic clipboard copy (default behavior)
+python calendar_slots.py
+
+# Disable clipboard copy
+python calendar_slots.py --no-copy
+```
+
+The tool automatically copies all free slots to your clipboard (without emojis) for easy sharing. The clipboard format is clean and ready for pasting into emails, messages, or calendars.
 
 ## Security and Permissions
 

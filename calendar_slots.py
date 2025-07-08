@@ -11,6 +11,7 @@ import os
 import time
 import threading
 import argparse
+import subprocess
 
 try:
     from EventKit import EKEventStore, EKEntityTypeEvent
@@ -20,6 +21,17 @@ try:
 except ImportError:
     HAS_EVENTKIT = False
     print("EventKit не найден. Установите pyobjc: pip install pyobjc-framework-EventKit")
+
+
+def copy_to_clipboard(text):
+    """Копирует текст в буфер обмена на Mac."""
+    try:
+        process = subprocess.Popen(['pbcopy'], stdin=subprocess.PIPE, text=True)
+        process.communicate(input=text)
+        return True
+    except Exception as e:
+        print(f"❌ Ошибка копирования в буфер: {e}")
+        return False
 
 
 class CalendarConfig:
@@ -296,6 +308,12 @@ def parse_arguments():
         help="Показать подробную статистику"
     )
     
+    parser.add_argument(
+        "--no-copy", 
+        action="store_true",
+        help="Не копировать результаты в буфер обмена"
+    )
+    
     return parser.parse_args()
 
 
@@ -376,6 +394,9 @@ def main():
         total_free_slots = 0
         total_free_hours = 0
         
+        # Список для сбора результатов для копирования
+        clipboard_lines = []
+        
         # Анализируем каждую неделю
         for week_num, (week_start, week_end) in enumerate(weeks, 1):
             if args.verbose:
@@ -405,10 +426,18 @@ def main():
                     free_slots = finder.find_free_slots(events, current_date)
                     
                     if free_slots:
-                        print(f"\n🗓️  {day_names.get(day_name, day_name)} ({current_date.strftime('%d.%m.%Y')})")
+                        day_header = f"🗓️  {day_names.get(day_name, day_name)} ({current_date.strftime('%d.%m.%Y')})"
+                        print(f"\n{day_header}")
+                        
+                        # Добавляем заголовок дня в буфер (без эмоджи для чистоты)
+                        clipboard_lines.append(f"{day_names.get(day_name, day_name)} ({current_date.strftime('%d.%m.%Y')})")
+                        
                         for start_time, end_time in free_slots:
                             slot_info = finder.format_time_slot(start_time, end_time)
                             print(f"   • {slot_info}")
+                            
+                            # Добавляем слот в буфер (без эмоджи для чистоты)
+                            clipboard_lines.append(f"   {slot_info}")
                             
                             # Подсчитываем статистику для verbose режима
                             if args.verbose:
@@ -430,9 +459,22 @@ def main():
                 print(f"\n📊 Итого на неделе: {week_slots} слотов, {week_hours:.1f} часов")
                 print()
         
+        # Копируем результаты в буфер обмена (если не отключено)
+        if not args.no_copy and clipboard_lines:
+            clipboard_text = "\n".join(clipboard_lines)
+            if copy_to_clipboard(clipboard_text):
+                print(f"\n📋 Свободные слоты скопированы в буфер обмена!")
+                if args.verbose:
+                    print("💡 Теперь можно вставить результаты в любое приложение (Cmd+V)")
+            else:
+                if args.verbose:
+                    print("❌ Не удалось скопировать в буфер обмена")
+        elif args.no_copy and args.verbose:
+            print("\n💡 Копирование в буфер отключено параметром --no-copy")
+        
         # Общая статистика только в подробном режиме
         if args.verbose:
-            print("📈 ОБЩАЯ СТАТИСТИКА:")
+            print("\n📈 ОБЩАЯ СТАТИСТИКА:")
             print("-" * 40)
             print(f"🔢 Всего свободных слотов: {total_free_slots}")
             print(f"⏰ Общее свободное время: {total_free_hours:.1f} часов")
