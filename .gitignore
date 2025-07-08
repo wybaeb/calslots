@@ -1,1 +1,86 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
 venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Virtual environment
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Logs
+*.log
+logs/
+
+# Build directories
+build/
+dist/
+*.egg-info/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local configuration files
+config.local.py
+local_settings.py
+
+# Desktop shortcuts (auto-generated)
+Desktop/
+*.desktop
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# Calendar data cache (if any)
+calendar_cache/
+*.cache
+
+# Personal notes and docs
+notes/
+personal_notes.md
+
+# Deployment and development files (optional - remove if you want to keep them)
+# DEPLOYMENT.md
+# CHANGES.md
+cleanup_desktop.sh

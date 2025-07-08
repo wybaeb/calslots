@@ -1,125 +1,216 @@
 # Mac Calendar Free Slots Finder
 
-🗓️ Python скрипт для поиска свободных слотов в Mac календаре на текущую и следующую неделю.
+🗓️ Python tool for finding free time slots in Mac Calendar with extensive customization options.
 
-## Возможности
+## Features
 
-- ✅ Подключение к родному Mac календарю через EventKit
-- 📅 Анализ текущей и следующей недели
-- ⏰ Поиск свободных слотов в рабочие часы (9:00-18:00 по умолчанию)
-- 📊 Красивый вывод результатов с эмоджи
-- 🎯 Показ длительности свободных слотов
-- 📋 Список запланированных событий для контекста
+- ✅ Native Mac Calendar integration through EventKit
+- 📅 Analyze current and upcoming weeks
+- ⏰ Configurable working hours (default: 8:00-19:00)
+- 📊 Beautiful output with emojis and color coding
+- 🎯 Minimum slot duration filtering
+- 📋 Flexible date range selection
+- 🖥️ Desktop shortcut creation
+- 💾 Minimal output mode by default
+- 🔧 Extensive command-line configuration
+- 🌐 Multi-language support (English/Russian)
 
-## Требования
+## Requirements
 
-- macOS (EventKit доступен только на Mac)
+- macOS (EventKit is Mac-only)
 - Python 3.7+
-- Доступ к календарю (система запросит разрешение)
+- Calendar access permission (system will prompt)
 
-## Установка
+## Installation
 
-1. Клонируйте репозиторий или скачайте файлы
-2. Установите зависимости:
+1. Clone this repository:
    ```bash
+   git clone https://github.com/yourusername/calslots.git
+   cd calslots
+   ```
+
+2. Run the installation script:
+   ```bash
+   chmod +x install.sh
+   ./install.sh
+   ```
+   
+   Or install manually:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
-## Использование
+## Usage
 
-### Базовое использование
+### Basic Usage
 
 ```bash
 python calendar_slots.py
 ```
 
-### Пример вывода
+### Command Line Options
 
+```bash
+# Show help
+python calendar_slots.py --help
+
+# Custom working hours
+python calendar_slots.py --start-hour 9 --end-hour 18
+
+# Analyze 3 weeks instead of default 2
+python calendar_slots.py --weeks 3
+
+# Include weekends
+python calendar_slots.py --include-weekends
+
+# Custom date range
+python calendar_slots.py --start-date 2024-01-15 --end-date 2024-01-30
+
+# Minimum slot duration (default: 30 minutes)
+python calendar_slots.py --min-duration 60
+
+# Verbose output with statistics
+python calendar_slots.py --verbose
+```
+
+### Desktop Shortcut
+
+Create a desktop shortcut for quick access:
+
+```bash
+chmod +x move_to_desktop.sh
+./move_to_desktop.sh
+```
+
+This creates a "📅 Calendar Slots" shortcut on your desktop that runs the tool with default settings.
+
+## Example Output
+
+### Default (Minimal) Output
+```
+🗓️  Среда (15.01.2025)
+   ✅ 09:00 - 10:00 (1ч 0м)
+   ✅ 11:30 - 14:00 (2ч 30м)
+   ✅ 16:00 - 19:00 (3ч 0м)
+
+🗓️  Четверг (16.01.2025)
+   ✅ 09:00 - 13:00 (4ч 0м)
+   ✅ 15:30 - 19:00 (3ч 30м)
+```
+
+### Verbose Output
 ```
 🗓️  Mac Calendar Free Slots Finder
 ==================================================
-Запрашиваю доступ к календарю...
-Доступ к календарю получен!
-📅 Анализируем период с 2024-01-15 по 2024-01-28
-
+📅 Анализируем период с 2025-01-15 по 2025-01-28
 🔍 Получаем события из календаря...
 📊 Найдено 8 событий
 
 📆 ТЕКУЩАЯ НЕДЕЛЯ
-   15.01.2024 - 21.01.2024
+   15.01.2025 - 19.01.2025
 ----------------------------------------
 
-🗓️  Понедельник (15.01.2024)
+🗓️  Среда (15.01.2025)
+   📝 Запланированные события:
+      • 10:00 - 11:30: Важная встреча
+      • 14:00 - 16:00: Созвон с командой
    ✅ Свободные слоты:
       • 09:00 - 10:00 (1ч 0м)
       • 11:30 - 14:00 (2ч 30м)
-      • 16:00 - 18:00 (2ч 0м)
+      • 16:00 - 19:00 (3ч 0м)
 
-🗓️  Вторник (16.01.2024)
-   ✅ Свободные слоты:
-      • 09:00 - 13:00 (4ч 0м)
-      • 15:30 - 18:00 (2ч 30м)
-
-...
+📊 СТАТИСТИКА
+   • Всего рабочих дней: 10
+   • Дней с событиями: 6
+   • Общее время свободных слотов: 47ч 30м
 ```
 
-## Настройка
+## Configuration
 
-### Изменение рабочих часов
-
-Вы можете изменить рабочие часы в коде:
-
-```python
-# В функции main()
-finder = FreeSlotsFinder(working_hours_start=8, working_hours_end=19)
+### Working Hours
+```bash
+# 24-hour format
+python calendar_slots.py --start-hour 8 --end-hour 20
 ```
 
-### Включение выходных дней
+### Working Days
+```bash
+# Include weekends
+python calendar_slots.py --include-weekends
 
-По умолчанию скрипт анализирует только рабочие дни (понедельник-пятница). Чтобы включить выходные, измените условие:
-
-```python
-# Заменить эту строку:
-if current_date.weekday() < 5:  # Понедельник-Пятница
-
-# На эту:
-if current_date.weekday() < 7:  # Понедельник-Воскресенье
+# Only specific days (Monday=0, Sunday=6)
+python calendar_slots.py --working-days 0,1,2,3,4
 ```
 
-## Безопасность и разрешения
+### Date Range
+```bash
+# Specific date range
+python calendar_slots.py --start-date 2025-01-15 --end-date 2025-01-30
 
-При первом запуске macOS запросит разрешение на доступ к календарю. Это нормально и необходимо для работы скрипта.
+# Number of weeks from today
+python calendar_slots.py --weeks 4
+```
 
-Скрипт имеет доступ только для чтения к вашему календарю и не может изменять или удалять события.
+### Minimum Slot Duration
+```bash
+# Only show slots longer than 1 hour
+python calendar_slots.py --min-duration 60
+```
 
-## Устранение неполадок
+## Security and Permissions
 
-### EventKit не найден
+- The tool requires Calendar access permission on first run
+- Only **read access** to your calendar - cannot modify or delete events
+- No data is sent to external servers
+- All processing happens locally on your Mac
 
-Если вы получаете ошибку "EventKit не найден", убедитесь что:
-1. Вы используете macOS (EventKit недоступен на других ОС)
-2. Установлены все зависимости: `pip install -r requirements.txt`
+### Setting Up Calendar Access
 
-### Доступ к календарю не предоставлен
+1. Run the tool for the first time
+2. macOS will prompt for Calendar access
+3. Click "OK" to grant permission
+4. If permission is denied, go to System Preferences → Security & Privacy → Privacy → Calendars and enable access for Terminal/Python
 
-Если система не предоставляет доступ к календарю:
-1. Откройте Настройки системы → Приватность и защита → Календари
-2. Убедитесь что Python/Terminal имеет доступ к календарю
-3. Попробуйте перезапустить скрипт
+## Troubleshooting
 
-### Пустой список событий
+### EventKit Not Found
+- Ensure you're running on macOS (EventKit is Mac-only)
+- Install dependencies: `pip install -r requirements.txt`
 
-Если скрипт не показывает события:
-1. Убедитесь что в календаре есть события на анализируемые даты
-2. Проверьте что события не помечены как "весь день"
-3. Убедитесь что календарь активен в приложении Календарь
+### Calendar Access Issues
+- Check System Preferences → Security & Privacy → Privacy → Calendars
+- Ensure Terminal/Python has calendar access
+- Try running the installation script again
 
-## Требования к системе
+### No Events Found
+- Verify you have events in the specified date range
+- Check that your calendar is active in the Calendar app
+- Ensure events are not marked as "All Day"
 
-- macOS 10.15+ (Catalina)
+### Virtual Environment Issues
+- Make sure to activate the virtual environment: `source venv/bin/activate`
+- Reinstall dependencies if needed: `pip install -r requirements.txt`
+
+## System Requirements
+
+- macOS 10.15+ (Catalina or later)
 - Python 3.7+
-- Установленные зависимости PyObjC
+- PyObjC framework
 
-## Лицензия
+## Contributing
 
-Этот проект распространяется под лицензией MIT. 
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly on macOS
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Author
+
+Created for efficient Mac calendar management and meeting scheduling. 
