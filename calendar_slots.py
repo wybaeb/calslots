@@ -176,6 +176,13 @@ class FreeSlotsFinder:
         """Находит свободные слоты на определенную дату."""
         if not self.is_working_day(date):
             return []
+        
+        now = datetime.datetime.now()
+        today = now.date()
+        
+        # Пропускаем прошедшие дни
+        if date < today:
+            return []
             
         # Фильтруем события только на эту дату
         day_events = [
@@ -188,9 +195,11 @@ class FreeSlotsFinder:
         day_end = datetime.datetime.combine(date, datetime.time(self.config.working_hours_end, 0))
         
         # Если это сегодня, начинаем с текущего времени
-        now = datetime.datetime.now()
-        if date == now.date():
+        if date == today:
             day_start = max(day_start, now)
+            # Если рабочий день уже закончился, не показываем слоты
+            if day_start >= day_end:
+                return []
         
         # Если нет событий, весь день свободен
         if not day_events:
