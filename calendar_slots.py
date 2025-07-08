@@ -314,6 +314,12 @@ def parse_arguments():
         help="Не копировать результаты в буфер обмена"
     )
     
+    parser.add_argument(
+        "--clean-copy", 
+        action="store_true",
+        help="Копировать в буфер без эмоджи (чистый текст)"
+    )
+    
     return parser.parse_args()
 
 
@@ -429,15 +435,24 @@ def main():
                         day_header = f"🗓️  {day_names.get(day_name, day_name)} ({current_date.strftime('%d.%m.%Y')})"
                         print(f"\n{day_header}")
                         
-                        # Добавляем заголовок дня в буфер (без эмоджи для чистоты)
-                        clipboard_lines.append(f"{day_names.get(day_name, day_name)} ({current_date.strftime('%d.%m.%Y')})")
+                        # Добавляем заголовок дня в буфер (с эмоджи по умолчанию, без эмоджи для --clean-copy)
+                        if clipboard_lines:  # Добавляем пустую строку между днями
+                            clipboard_lines.append("")
+                        
+                        if args.clean_copy:
+                            clipboard_lines.append(f"{day_names.get(day_name, day_name)} ({current_date.strftime('%d.%m.%Y')})")
+                        else:
+                            clipboard_lines.append(day_header)
                         
                         for start_time, end_time in free_slots:
                             slot_info = finder.format_time_slot(start_time, end_time)
                             print(f"   • {slot_info}")
                             
-                            # Добавляем слот в буфер (без эмоджи для чистоты)
-                            clipboard_lines.append(f"   {slot_info}")
+                            # Добавляем слот в буфер (с эмоджи по умолчанию, без эмоджи для --clean-copy)
+                            if args.clean_copy:
+                                clipboard_lines.append(f"   {slot_info}")
+                            else:
+                                clipboard_lines.append(f"   ✅ {slot_info}")
                             
                             # Подсчитываем статистику для verbose режима
                             if args.verbose:
@@ -463,7 +478,10 @@ def main():
         if not args.no_copy and clipboard_lines:
             clipboard_text = "\n".join(clipboard_lines)
             if copy_to_clipboard(clipboard_text):
-                print(f"\n📋 Свободные слоты скопированы в буфер обмена!")
+                if args.clean_copy:
+                    print(f"\n📋 Свободные слоты скопированы в буфер обмена (чистый текст)!")
+                else:
+                    print(f"\n📋 Свободные слоты скопированы в буфер обмена!")
                 if args.verbose:
                     print("💡 Теперь можно вставить результаты в любое приложение (Cmd+V)")
             else:

@@ -77,6 +77,9 @@ python calendar_slots.py --verbose
 
 # Disable automatic clipboard copy
 python calendar_slots.py --no-copy
+
+# Copy clean text without emojis
+python calendar_slots.py --clean-copy
 ```
 
 ### Desktop Shortcut
@@ -104,6 +107,28 @@ This creates a "📅 Calendar Slots" shortcut on your desktop that runs the tool
    ✅ 15:30 - 19:00 (3ч 30м)
 
 📋 Свободные слоты скопированы в буфер обмена!
+
+**Clipboard contains (with emojis by default):**
+```
+🗓️  Среда (15.01.2025)
+   ✅ 09:00 - 10:00 (1ч 0м)
+   ✅ 11:30 - 14:00 (2ч 30м)
+
+🗓️  Четверг (16.01.2025)
+   ✅ 09:00 - 13:00 (4ч 0м)
+   ✅ 15:30 - 19:00 (3ч 30м)
+```
+
+**With `--clean-copy` flag:**
+```
+Среда (15.01.2025)
+   09:00 - 10:00 (1ч 0м)
+   11:30 - 14:00 (2ч 30м)
+
+Четверг (16.01.2025)
+   09:00 - 13:00 (4ч 0м)
+   15:30 - 19:00 (3ч 30м)
+```
 ```
 
 ### Verbose Output
@@ -167,14 +192,17 @@ python calendar_slots.py --min-duration 60
 
 ### Clipboard Integration
 ```bash
-# Automatic clipboard copy (default behavior)
+# Automatic clipboard copy with emojis (default behavior)
 python calendar_slots.py
+
+# Copy clean text without emojis (for business emails)
+python calendar_slots.py --clean-copy
 
 # Disable clipboard copy
 python calendar_slots.py --no-copy
 ```
 
-The tool automatically copies all free slots to your clipboard (without emojis) for easy sharing. The clipboard format is clean and ready for pasting into emails, messages, or calendars.
+The tool automatically copies all free slots to your clipboard **with emojis** by default for better readability. Use `--clean-copy` for plain text format suitable for business emails or formal communications.
 
 ## Security and Permissions
 
